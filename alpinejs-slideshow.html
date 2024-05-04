@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpine JS Image Gallery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 700px;
+    }
+
+    .thumbnails {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .thumbnail {
+      width: 50px;
+      height: 50px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .thumbnail:hover {
+      opacity: 0.7;
+    }
+
+    .thumbnail.active {
+      border: 2px solid #007bff;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+
+    .arrow-left {
+      left: 10px;
+    }
+
+    .arrow-right {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+<div x-data="gallery()">
+  <div class="gallery">
+    <button @click="prevImage" class="arrow arrow-left">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <img x-bind:src="images[currentIndex]" alt="Main Image">
+    <button @click="nextImage" class="arrow arrow-right">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <div class="thumbnails">
+      <template x-for="(image, index) in images" :key="index">
+        <img x-on:click="showImage(index)" class="thumbnail" :class="{ 'active': index === currentIndex }" :src="image" alt="Thumbnail">
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+  function gallery() {
+    return {
+      images: [
+        'file:///C:/1.jpg',
+        'file:///C:/2.jpg',
+        'file:///C:/3.jpg',
+        'file:///C:/4.jpg'
+      ],
+      currentIndex: 0,
+      showImage(index) {
+        this.currentIndex = index;
+      },
+      prevImage() {
+        this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+      },
+      nextImage() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+      }
+    };
+  }
+</script>
+</body>
+</html>
